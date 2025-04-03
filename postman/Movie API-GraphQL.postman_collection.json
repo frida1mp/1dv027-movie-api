@@ -1,0 +1,330 @@
+{
+	"info": {
+		"_postman_id": "06f5756f-f0a3-4026-ad38-ce27ed0420d9",
+		"name": "Movie API-GraphQL",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31386431"
+	},
+	"item": [
+		{
+			"name": "Add movie",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{JWT_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\n  addMovie(title: \"Test Movie\", release_year: 2023, genre: \"Action\") {\n    id\n    title\n    release_year\n    genre\n  }\n}\n",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						""
+					]
+				},
+				"description": "### **Add Movie Mutation**\n\n**Purpose:**  \nCreates a new movie record in the database with the provided details.\n\n**Required Parameters:**\n\n**title (String, required):** The title of the movie.\n\n**release_year (Int, required):** The release year of the movie.\n\n**genre (String, optional):** The genre of the movie.\n\n**Expected Response:**\n\n- **Movie Object:**\n    \n    - **id (ID):** Unique identifier of the movie.\n        \n    - **title (String):** Title of the movie.\n        \n    - **release_year (Int):** Release year.\n        \n    - **genre (String):** Genre.\n        \n    - **actors (Array):** Initially empty.\n        \n    - **ratings (Array):** Initially empty.\n        \n\n**Notes:**\n\nThis mutation requires authentication. Ensure the `Authorization` header includes a valid JWT token."
+			},
+			"response": []
+		},
+		{
+			"name": "Update movie",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{JWT_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\n  updateMovie(id: \"67eb9f717ab8bb513f07a418\", title: \"Updated Test Movie\", release_year: 2024, genre: \"Adventure\") {\n    id\n    title\n    release_year\n    genre\n  }\n}\n",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						""
+					]
+				},
+				"description": "### **Update Movie Mutation**\n\n**Purpose:**  \nUpdates an existing movie’s details with new information provided by the user.\n\n**Required Parameters:**\n\n**id (ID, required):** The unique identifier of the movie to update.\n\n**title (String, optional):** The new title (if updating).\n\n**release_year (Int, optional):** The new release year (if updating).\n\n**genre (String, optional):** The new genre (if updating).\n\n**Expected Response:**\n\n- **Updated Movie Object:**\n    \n    - **id (ID):** Unique identifier.\n        \n    - **title (String):** Updated title.\n        \n    - **release_year (Int):** Updated release year.\n        \n    - **genre (String):** Updated genre.\n        \n\n**Notes:**\n\nThis mutation requires authentication. Make sure to include a valid JWT token in the `Authorization` header."
+			},
+			"response": []
+		},
+		{
+			"name": "Delete movie",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{JWT_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\n  deleteMovie(id: \"67eb9f717ab8bb513f07a418\")\n}\n",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						""
+					]
+				},
+				"description": "### **Delete Movie Mutation**\n\n**Purpose:**  \nDeletes a movie record from the database based on its unique identifier.\n\n**Required Parameters:**\n\n**id (ID, required):** The unique identifier of the movie to delete.\n\n**Expected Response:**\n\n**Boolean:** `true` if the deletion was successful, otherwise `false`.\n\n**Notes:**\n\nThis mutation requires authentication. The request must include a valid JWT token in the `Authorization` header."
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"pm.environment.set(\"JWT_TOKEN\", jsonData.data.login);",
+							"",
+							"",
+							"",
+							"pm.test(\"Response has the required fields - data and login\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData).to.have.property('data');",
+							"    pm.expect(responseData.data).to.have.property('login');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Login field is a non-empty string\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData.data.login).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation {\n  login(username: \"admin\", password: \"pass\")\n}\n",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						""
+					]
+				},
+				"description": "### **Login Request**\n\n**Purpose:**  \nAuthenticates the user and returns a JWT token that will be used for subsequent authenticated operations (e.g., adding, updating, or deleting a movie).\n\n**Required Parameters:**\n\n**username (String):** The username of the user.\n\n**password (String):** The user’s password.\n\n**Expected Response:**\n\n**JWT Token (String):** A valid JWT token on successful login (e.g., `\"eyJhbGciOiJIUzI1NiIsInR5cCI6...\"`).\n\n**Notes:**\n\nThis endpoint does not require prior authentication. Use the returned token in the `Authorization` header (formatted as `Bearer YOUR_JWT_TOKEN`) for all subsequent mutations that require authentication."
+			},
+			"response": []
+		},
+		{
+			"name": "Get movies",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{JWT_TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query {\n  movies {\n    id\n    title\n    release_year\n    genre\n  }\n}\n",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						""
+					]
+				},
+				"description": "### **Query: Get All Movies**\n\n**Purpose:**  \nRetrieves a list of all movies in the database, including details such as title, release year, genre, description, and any associated actors and ratings.\n\n**Required Parameters:**\n\n**None.**\n\n**Expected Response:**\n\n**Array of Movie Objects:** Each object contains:\n\n- **id (ID)**\n    \n- **title (String)**\n    \n- **release_year (Int)**\n    \n- **genre (String)**\n    \n- **description (String)**\n    \n- **actors (Array of Actor Objects)**\n    \n- **ratings (Array of Rating Objects)**\n    \n\n**Notes:**\n\nThis query is read-only and typically does not require authentication."
+			},
+			"response": []
+		},
+		{
+			"name": "Get single movie",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query {\n  movie(id: \"67e508966389fd9a45d1675f\") {\n    id\n    title\n    release_year\n    genre\n    description\n    actors {\n      id\n      name\n    }\n  }\n}\n",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						""
+					]
+				},
+				"description": "### **Query: Get Ratings for a Movie**\n\n**Purpose:**  \nRetrieves all ratings associated with a specific movie.\n\n**Required Parameters:**\n\n- **movie_id (ID, required):** The identifier of the movie whose ratings are being requested.\n    \n\n**Expected Response:**\n\n**Array of Rating Objects:** Each object includes properties like:\n\n- **id (ID)**\n    \n- **text (String)**\n    \n- **score (Float)**\n    \n- **movie (Movie Object reference, if applicable)**\n    \n\n**Notes:**\n\nThis query is read-only and typically does not require authentication."
+			},
+			"response": []
+		},
+		{
+			"name": "Get actors",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query {\n  actors {\n    id\n    name\n    movies_played {\n      id\n      title\n    }\n  }\n}\n",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						""
+					]
+				},
+				"description": "**Get Actors**  \n**Purpose:**  \nRetrieves a list of all actors along with the movies they have participated in.\n\n**Required Parameters:**  \n  \nNone.\n\n**Expected Response:**  \n  \nArray of Actor Objects: Each object includes properties such as:\n\n- **id (ID):** A unique identifier for the actor.\n    \n- **name (String):** The actor’s name.\n    \n- **movies_played (Array of Movie Objects):** A list of movies in which the actor has performed (each movie typically includes properties like id, title, release_year, etc.).\n    \n\n**Notes:**\n\nThis query is read-only and typically does not require authentication."
+			},
+			"response": []
+		},
+		{
+			"name": "Get ratings",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query($movieId: ID!) {\n  ratings(movie_id: $movieId) {\n    text\n    score\n    id\n    movie {\n      id\n    }\n  }\n}\n",
+						"variables": "{\n  \"movieId\": \"67ebae235e6423cfd0dcb046\"\n}"
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						""
+					]
+				},
+				"description": "**Get Ratings for a Movie**  \n**Purpose:**  \nRetrieves all ratings associated with a specific movie.\n\n**Required Parameters:**\n\n- **movie_id (ID, required):** The identifier of the movie whose ratings are being requested.\n    \n\n**Expected Response:**  \n  \nArray of Rating Objects: Each object includes properties such as:\n\n- **id (ID):** A unique identifier for the rating.\n    \n- **text (String):** The text description of the rating.\n    \n- **score (Float):** The numerical score of the rating.\n    \n- **movie (Movie Object reference, if applicable):** The movie associated with the rating, typically including its id and other basic details.\n    \n\n**Notes:**\n\nThis query is read-only and typically does not require authentication."
+			},
+			"response": []
+		}
+	]
+}
