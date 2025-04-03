@@ -14,7 +14,8 @@ const app = express()
 const mongoURI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/movie-api'
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 30000
 })
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('MongoDB connection error:', err))
