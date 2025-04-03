@@ -22,7 +22,7 @@ const JWT_SECRET = process.env.JWT_SECRET
 async function startServer () {
   try {
     // Use the MongoDB URI provided via environment variable or default to localhost
-    const mongoURI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/movie-api'
+    const mongoURI = process.env.MONGODB_URI
     await mongoose.connect(mongoURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true
@@ -45,7 +45,7 @@ async function startServer () {
         }
       }
     })
-    const port = process.env.PORT || 4000
+    const port = process.env.PORT
     const { url } = await startStandaloneServer(server, {
       listen: { port },
       /**
