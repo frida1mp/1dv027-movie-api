@@ -21,7 +21,12 @@ const JWT_SECRET = process.env.JWT_SECRET
  */
 async function startServer () {
   try {
-    await mongoose.connect('mongodb://127.0.0.1:27017/movie-api')
+    // Use the MongoDB URI provided via environment variable or default to localhost
+    const mongoURI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/movie-api'
+    await mongoose.connect(mongoURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    })
     console.log('Connected to MongoDB')
 
     const server = new ApolloServer({
@@ -40,8 +45,9 @@ async function startServer () {
         }
       }
     })
+    const port = process.env.PORT || 4000
     const { url } = await startStandaloneServer(server, {
-      listen: { port: 4000 },
+      listen: { port },
       /**
        * Sets the context for each GraphQL request.
        *
