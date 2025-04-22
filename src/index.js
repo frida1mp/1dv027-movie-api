@@ -6,6 +6,7 @@ const { typeDefs } = require('./schema.js')
 const { resolvers } = require('./resolvers.js')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
+const cors = require('cors')
 
 const JWT_SECRET = process.env.JWT_SECRET
 const app = express()
@@ -19,6 +20,11 @@ mongoose.connect(mongoURI, {
 })
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('MongoDB connection error:', err))
+
+app.use(cors({
+  origin: ['https://your-frontend.vercel.app', 'http://localhost:5173'],
+  credentials: true,
+}));
 
 // Serve the favicon (or you could serve all static assets)
 app.use('/favicon.ico', express.static('public/favicon.ico'))
