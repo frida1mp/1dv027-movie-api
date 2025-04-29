@@ -232,7 +232,16 @@ const resolvers = {
         console.error(`Error deleting movie with id ${id}:`, error)
         throw new Error('Failed to delete movie')
       }
-    }
+    },
+
+    /**
+     *
+     */
+    addRating: async (_, { movie_id, text, score }) => {
+      const newRating = new Rating({ movie: movie_id, text, score })
+      await newRating.save()
+      return newRating
+    },
   },
 
   Movie: {
