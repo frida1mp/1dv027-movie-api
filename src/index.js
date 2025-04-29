@@ -22,7 +22,7 @@ mongoose.connect(mongoURI, {
   .catch((err) => console.error('MongoDB connection error:', err))
 
 app.use(cors({
-  origin: ['https://w2-deqz8lsul-fridas-projects-2cf852d1.vercel.app', 'http://localhost:5173'],
+  origin: ['https://w2-steel.vercel.app/', 'http://localhost:5173'],
   credentials: true,
 }));
 
