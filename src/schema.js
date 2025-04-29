@@ -37,6 +37,7 @@ const typeDefs = gql`
     addMovie(title: String!, release_year: Int!, genre: String): Movie
     updateMovie(id: ID!, title: String, release_year: Int, genre: String): Movie
     deleteMovie(id: ID!): Boolean
+    addRating(movie_id: ID!, score: Float!): Rating
   }
 `
 
